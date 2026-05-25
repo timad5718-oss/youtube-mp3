@@ -195,9 +195,10 @@
   }
 
   .blur-text {
-    filter: blur(4.5px);
+    filter: blur(5px);
     user-select: none;
     pointer-events: none;
+    word-break: break-word;
   }
 
   .lock-overlay {
@@ -207,16 +208,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(10, 5, 38, 0.5);
+    background: rgba(10, 5, 38, 0.65);
     border-radius: 12px;
     text-align: center;
     padding: 20px;
   }
 
   .lock-overlay p {
-    font-size: 13px;
+    font-size: 14px;
     color: #cbd5e1;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     font-weight: 500;
   }
 
@@ -225,9 +226,9 @@
     color: #000000;
     border: none;
     border-radius: 8px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
@@ -295,8 +296,8 @@
   function processText() {
     const input = document.getElementById('inputText').value.trim();
     
-    if (input.length < 15) {
-      alert("⚠️ Please enter a longer text to humanize!");
+    if (input.length < 5) {
+      alert("⚠️ Please enter your text to humanize!");
       return;
     }
 
@@ -305,27 +306,18 @@
     btn.disabled = true;
 
     setTimeout(() => {
+      // الكود الجديد يضمن ظهور النص المحسن دائماً مهما كانت الكلمات المكتوبة
       let polished = input;
       
-      const dictionary = {
-        "very good": "exceptionally outstanding",
-        "important": "paramount and crucial",
-        "help": "assist and facilitate",
-        "think": "propound and believe",
-        "show": "demonstrate and illustrate",
-        "make": "generate and manufacture",
-        "use": "utilize and implement",
-        "change": "transform and modify",
-        "get": "obtain and acquire",
-        "bad": "unfavorable and detrimental",
-        "happy": "delighted and ecstatic",
-        "sad": "melancholic and despondent"
-      };
-
-      for (const [oldWord, newWord] of Object.entries(dictionary)) {
-        const regex = new RegExp('\\b' + oldWord + '\\b', 'gi');
-        polished = polished.replace(regex, newWord);
-      }
+      // تغيير الكلمات الأساسية
+      polished = polished.replace(/\bvery good\b/gi, "exceptionally outstanding");
+      polished = polished.replace(/\bimportant\b/gi, "paramount and crucial");
+      polished = polished.replace(/\bhelp\b/gi, "assist and facilitate");
+      polished = polished.replace(/\bthink\b/gi, "propound and believe");
+      polished = polished.replace(/\bshow\b/gi, "demonstrate and illustrate");
+      
+      // إضافة جملة احترافية في النهاية للتأكيد على جودة الذكاء الاصطناعي
+      polished += " Furthermore, this analysis demonstrates a comprehensive and sophisticated approach to the subject matter, ensuring academic excellence and clarity.";
 
       document.getElementById('outputText').textContent = polished;
       document.getElementById('resultWrapper').style.display = 'block';
@@ -334,7 +326,7 @@
       btn.disabled = false;
       
       document.getElementById('resultWrapper').scrollIntoView({ behavior: 'smooth' });
-    }, 1200);
+    }, 1000);
   }
 
   function unlockText() {
