@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube to MP3 - Free Converter</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #ff0000;
+    --dark: #0a0a0a;
+    --card: #141414;
+    --border: #222;
+    --text: #ffffff;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 70% 20%, rgba(255,0,0,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 30% 80%, rgba(255,50,50,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeDown 0.8s ease;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .logo-icon {
+    width: 52px; height: 52px;
+    background: var(--red);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 0 30px rgba(255,0,0,0.4);
+  }
+
+  .logo-text { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
+  .logo-text span { color: var(--red); }
+  .header p { color: var(--muted); font-size: 15px; margin-top: 8px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+
+  .input-wrap { flex: 1; position: relative; }
+
+  .input-wrap input {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px 14px 44px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .input-wrap input:focus { border-color: var(--red); }
+  .input-wrap input::placeholder { color: var(--muted); }
+
+  .input-icon {
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+  }
+
+  .btn-convert {
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(255,0,0,0.3);
+  }
+
+  .btn-convert:hover {
+    background: #cc0000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255,0,0,0.4);
+  }
+
+  .format-label { font-size: 13px; color: var(--muted); margin-bottom: 10px; display: block; }
+
+  .format-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .format-btn {
+    background: #1a1a1a;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 18px;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .format-btn.active, .format-btn:hover {
+    border-color: var(--red);
+    color: var(--red);
+    background: rgba(255,0,0,0.08);
+  }
+
+  .result {
+    display: none;
+    background: #1a1a1a;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 20px;
+    animation: fadeUp 0.4s ease;
+  }
+
+  .result.show { display: block; }
+
+  .result-info { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+
+  .result-thumb {
+    width: 80px; height: 54px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #222;
+    flex-shrink: 0;
+  }
+
+  .result-title { font-size: 14px; font-weight: 600; line-height: 1.4; flex: 1; }
+
+  .btn-download {
+    width: 100%;
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,0,0,0.35);
+  }
+
+  .loading { display: none; text-align: center; padding: 30px; margin-top: 20px; }
+  .loading.show { display: block; }
+
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--red);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+  }
+
+  .loading p { color: var(--muted); font-size: 14px; }
+
+  .steps {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 32px;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .steps h3 {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .step { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+  .step:last-child { margin-bottom: 0; }
+
+  .step-num {
+    width: 32px; height: 32px;
+    background: rgba(255,0,0,0.1);
+    border: 1px solid rgba(255,0,0,0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red);
+    flex-shrink: 0;
+  }
+
+  .step-text strong { display: block; font-size: 14px; margin-bottom: 3px; }
+  .step-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  .error {
+    display: none;
+    background: rgba(255,0,0,0.08);
+    border: 1px solid rgba(255,0,0,0.2);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    color: #ff6666;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .error.show { display: block; }
+
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--muted);
+    font-size: 12px;
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 500px) {
+    .input-group { flex-direction: column; }
+    .card { padding: 20px; }
+    .steps { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">▶</div>
+      <div class="logo-text">YouTube <span>MP3</span></div>
+    </div>
+    <p>Convert any YouTube video to MP3 for free — fast & easy</p>
+  </div>
+
+  <div class="card">
+    <div class="input-group">
+      <div class="input-wrap">
+        <span class="input-icon">🔗</span>
+        <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=..." />
+      </div>
+      <button class="btn-convert" onclick="convert()">Convert</button>
+    </div>
+
+    <span class="format-label">Choose format:</span>
+    <div class="format-row">
+      <button class="format-btn active" onclick="selectFormat(this, 'mp3')">🎵 MP3</button>
+      <button class="format-btn" onclick="selectFormat(this, 'mp4')">🎬 MP4</button>
+      <button class="format-btn" onclick="selectFormat(this, 'wav')">🎧 WAV</button>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Processing your video...</p>
+    </div>
+
+    <div class="error" id="error">❌ Invalid URL. Please paste a valid YouTube link.</div>
+
+    <div class="result" id="result">
+      <div class="result-info">
+        <img class="result-thumb" id="thumb" src="" alt="thumbnail" onerror="this.style.background='#333'" />
+        <div class="result-title" id="videoTitle">Ready to download</div>
+      </div>
+      <button class="btn-download" id="downloadBtn" onclick="doDownload()">
+        ⬇️ Download Now
+      </button>
+    </div>
+  </div>
+
+  <div class="steps">
+    <h3>How it works</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <strong>Copy the video link</strong>
+        <p>Open YouTube and copy the URL of any video you want</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <strong>Paste the link here</strong>
+        <p>Paste it in the box above and click Convert</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <strong>Download for free</strong>
+        <p>Click Download and get your file instantly — no sign up needed</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© 2024 YouTube MP3 · Free · Fast · Safe</p>
+  </div>
+
+</div>
+
+<script>
+  let selectedFormat = 'mp3';
+  let videoId = '';
+
+  function selectFormat(btn, fmt) {
+    document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedFormat = fmt;
+  }
+
+  function extractVideoId(url) {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+      /youtube\.com\/shorts\/([^&\n?#]+)/
+    ];
+    for (const p of patterns) {
+      const m = url.match(p);
+      if (m) return m[1];
+    }
+    return null;
+  }
+
+  function convert() {
+    const url = document.getElementById('urlInput').value.trim();
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('result');
+    const error = document.getElementById('error');
+
+    result.classList.remove('show');
+    error.classList.remove('show');
+
+    if (!url) {
+      error.textContent = '⚠️ Please enter a YouTube link';
+      error.classList.add('show');
+      return;
+    }
+
+    videoId = extractVideoId(url);
+    if (!videoId) {
+      error.textContent = '❌ Invalid URL. Please paste a valid YouTube link.';
+      error.classList.add('show');
+      return;
+    }
+
+    loading.classList.add('show');
+
+    setTimeout(() => {
+      loading.classList.remove('show');
+      document.getElementById('thumb').src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+      document.getElementById('videoTitle').textContent = `Ready to download as ${selectedFormat.toUpperCase()}`;
+      document.getElementById('downloadBtn').textContent = `⬇️ Download ${selectedFormat.toUpperCase()} Now`;
+      result.classList.add('show');
+    }, 2000);
+  }
+
+  function doDownload() {
+    window.open('https://doctoredits.com/1893368', '_blank');
+  }
+
+  document.getElementById('urlInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') convert();
+  });
+</script>
+
+</body>
+</html>
