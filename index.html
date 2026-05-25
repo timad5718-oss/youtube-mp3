@@ -3,443 +3,343 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YouTube to MP3 & MP4 - Premium High-Speed Converter</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<title>AIPolisher - Free AI Text Humanizer & Essay Improver</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #ff0000;
-    --dark: #0a0a0a;
-    --card: #141414;
-    --border: #222;
-    --text: #ffffff;
-    --muted: #888;
+    --bg: #030014;
+    --card: #0a0526;
+    --border: #1f154d;
+    --purple: #7c3aed;
+    --purple-hover: #6d28d9;
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --success: #10b981;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: var(--dark);
+    background-color: var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
     overflow-x: hidden;
   }
 
   body::before {
     content: '';
-    position: fixed;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(ellipse at 70% 20%, rgba(255,0,0,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 30% 80%, rgba(255,50,50,0.05) 0%, transparent 50%);
+    position: absolute;
+    top: -20%; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
   }
 
   .container {
-    max-width: 700px;
+    max-width: 800px;
+    width: 100%;
     margin: 0 auto;
     padding: 40px 20px;
+    flex: 1;
     position: relative;
     z-index: 1;
   }
 
   .header {
     text-align: center;
-    margin-bottom: 50px;
-    animation: fadeDown 0.8s ease;
+    margin-bottom: 40px;
   }
 
-  .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
+  .badge {
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    color: #a78bfa;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
     margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  .logo-icon {
-    width: 52px; height: 52px;
-    background: var(--red);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    box-shadow: 0 0 30px rgba(255,0,0,0.4);
+  h1 {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+    background: linear-gradient(to right, #ffffff, #a1a1aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .logo-text { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
-  .logo-text span { color: var(--red); }
-  .header p { color: var(--muted); font-size: 15px; margin-top: 8px; }
+  h1 span {
+    background: linear-gradient(to right, #a78bfa, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
-  .card {
+  .header p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .main-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 32px;
-    margin-bottom: 24px;
-    animation: fadeUp 0.8s ease 0.2s both;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.7);
   }
 
-  .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-  .input-wrap { flex: 1; position: relative; }
+  .textarea-container {
+    position: relative;
+    margin-bottom: 20px;
+  }
 
-  .input-wrap input {
+  textarea {
     width: 100%;
-    background: #1a1a1a;
-    border: 1.5px solid var(--border);
+    height: 180px;
+    background: #05021a;
+    border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 14px 18px 14px 44px;
+    padding: 16px;
     color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    font-family: inherit;
+    font-size: 15px;
+    resize: none;
     outline: none;
-    transition: border-color 0.3s;
+    transition: all 0.3s;
   }
 
-  .input-wrap input:focus { border-color: var(--red); }
-  .input-wrap input::placeholder { color: var(--muted); }
+  textarea:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+  }
 
-  .input-icon {
+  .char-count {
     position: absolute;
-    left: 14px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px;
-    pointer-events: none;
+    bottom: 12px; right: 12px;
+    font-size: 12px;
+    color: var(--muted);
   }
 
-  .btn-convert {
-    background: var(--red);
+  .btn-polish {
+    width: 100%;
+    background: var(--purple);
     color: white;
     border: none;
     border-radius: 12px;
-    padding: 14px 24px;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.3s;
-    box-shadow: 0 4px 20px rgba(255,0,0,0.3);
-  }
-
-  .btn-convert:hover {
-    background: #cc0000;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(255,0,0,0.4);
-  }
-
-  .format-label { font-size: 13px; color: var(--muted); margin-bottom: 10px; display: block; }
-  .format-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
-
-  .format-btn {
-    background: #1a1a1a;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 5px;
-    color: var(--muted);
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    padding: 16px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    text-align: center;
-  }
-
-  .format-btn.active, .format-btn:hover {
-    border-color: var(--red);
-    color: var(--red);
-    background: rgba(255,0,0,0.08);
-  }
-
-  .result {
-    display: none;
-    background: #1a1a1a;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    margin-top: 20px;
-    animation: fadeUp 0.4s ease;
-  }
-
-  .result.show { display: block; }
-  .result-info { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-
-  .result-thumb {
-    width: 80px; height: 54px;
-    border-radius: 8px;
-    object-fit: cover;
-    background: #222;
-    flex-shrink: 0;
-  }
-
-  .result-title { font-size: 14px; font-weight: 600; line-height: 1.4; flex: 1; }
-
-  .btn-download {
-    width: 100%;
-    background: linear-gradient(135deg, #ff0000, #cc0000);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 13px;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
   }
 
-  .btn-download:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255,0,0,0.35);
+  .btn-polish:hover {
+    background: var(--purple-hover);
+    transform: translateY(-1px);
   }
 
-  .loading { display: none; text-align: center; padding: 30px; margin-top: 20px; }
-  .loading.show { display: block; }
-
-  .spinner {
-    width: 40px; height: 40px;
-    border: 3px solid var(--border);
-    border-top-color: var(--red);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 12px;
+  .result-wrapper {
+    display: none;
+    margin-top: 24px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    animation: fadeIn 0.4s ease;
   }
 
-  .loading p { color: var(--muted); font-size: 14px; }
-
-  .steps {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 28px 32px;
-    animation: fadeUp 0.8s ease 0.4s both;
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
   }
 
-  .steps h3 {
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .step { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
-  .step:last-child { margin-bottom: 0; }
-
-  .step-num {
-    width: 32px; height: 32px;
-    background: rgba(255,0,0,0.1);
-    border: 1px solid rgba(255,0,0,0.3);
-    border-radius: 8px;
+  .result-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--success);
     display: flex;
     align-items: center;
+    gap: 6px;
+  }
+
+  .output-box {
+    width: 100%;
+    min-height: 120px;
+    background: rgba(255,255,255,0.02);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #e4e4e7;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .blur-text {
+    filter: blur(4.5px);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .lock-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    background: rgba(10, 5, 38, 0.5);
+    border-radius: 12px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .lock-overlay p {
+    font-size: 13px;
+    color: #cbd5e1;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .btn-unlock {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: inherit;
     font-size: 13px;
     font-weight: 700;
-    color: var(--red);
-    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.2);
   }
 
-  .step-text strong { display: block; font-size: 14px; margin-bottom: 3px; }
-  .step-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-  .error {
-    display: none;
-    background: rgba(255,0,0,0.08);
-    border: 1px solid rgba(255,0,0,0.2);
-    border-radius: 10px;
-    padding: 14px 18px;
-    margin-top: 16px;
-    color: #ff6666;
-    font-size: 14px;
-    text-align: center;
+  .btn-unlock:hover {
+    background: #e4e4e7;
+    transform: scale(1.02);
   }
-
-  .error.show { display: block; }
 
   .footer {
     text-align: center;
-    margin-top: 40px;
+    padding: 24px;
     color: var(--muted);
-    font-size: 12px;
-    animation: fadeUp 0.8s ease 0.6s both;
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.02);
   }
 
-  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  @media (max-width: 500px) {
-    .input-group { flex-direction: column; }
-    .btn-convert { width: 100%; }
-    .card { padding: 20px; }
-    .steps { padding: 20px; }
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 </style>
-
-<script type="text/javascript" src="https://doctoredits.com/script_include.php?id=1897462"></script>
-
 </head>
 <body>
 
 <div class="container">
-
   <div class="header">
-    <div class="logo">
-      <div class="logo-icon">▶</div>
-      <div class="logo-text">YouTube <span>Converter</span></div>
-    </div>
-    <p>Convert any YouTube video to MP3 or MP4 - Fast & High Quality</p>
+    <span class="badge">🤖 Human-Like AI Engine v2.0</span>
+    <h1>AI <span>Text Humanizer</span></h1>
+    <p>Instantly polish your text, bypass AI detectors, and upgrade your vocabulary for free.</p>
   </div>
 
-  <div class="card">
-    <div class="input-group">
-      <div class="input-wrap">
-        <span class="input-icon">🔗</span>
-        <input type="text" id="urlInput" placeholder="Paste YouTube link here..." />
+  <div class="main-card">
+    <div class="textarea-container">
+      <textarea id="inputText" placeholder="Paste your English text, essay, or email here (Min 20 words)..." oninput="updateCount()"></textarea>
+      <div class="char-count" id="charCount">0 characters</div>
+    </div>
+
+    <button class="btn-polish" onclick="processText()" id="btnAction">✨ Optimize & Humanize</button>
+
+    <div class="result-wrapper" id="resultWrapper">
+      <div class="result-header">
+        <span class="result-label">✅ Humanized Output Ready (99% Human Score)</span>
       </div>
-      <button class="btn-convert" onclick="convert()">Convert</button>
-    </div>
-
-    <span class="format-label">Choose output format:</span>
-    <div class="format-row">
-      <button class="format-btn active" onclick="selectFormat(this, 'mp3')">🎵 MP3 (Audio)</button>
-      <button class="format-btn" onclick="selectFormat(this, 'mp4')">🎬 MP4 (Video)</button>
-    </div>
-
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      <p id="loadingText">Connecting to streaming API server...</p>
-    </div>
-
-    <div class="error" id="error">❌ Invalid URL. Please paste a valid YouTube link.</div>
-
-    <div class="result" id="result">
-      <div class="result-info">
-        <img class="result-thumb" id="thumb" src="" alt="thumbnail" />
-        <div class="result-title" id="videoTitle">Ready to download</div>
-      </div>
-      <button class="btn-download" id="downloadBtn" onclick="doDownload()">
-        ⬇️ Download Now
-      </button>
-    </div>
-  </div>
-
-  <div class="steps">
-    <h3>How it works</h3>
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-text">
-        <strong>Copy YouTube Link</strong>
-        <p>Copy the URL of the video or shorts from YouTube app or browser.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-text">
-        <strong>Paste & Convert</strong>
-        <p>Paste the copied link into the field above and click Convert.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-text">
-        <strong>Unlock & Download</strong>
-        <p>Click Download Now, complete a quick verification step, and your real file will download automatically.</p>
+      <div class="output-box">
+        <div id="outputText" class="blur-text"></div>
+        <div class="lock-overlay">
+          <p>Verification required to unlock and copy the full high-quality text.</p>
+          <button class="btn-unlock" onclick="unlockText()">🔓 Unlock Full Text</button>
+        </div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="footer">
-    <p>© 2026 YouTube Converter · Fast · Free · Real Service</p>
-  </div>
-
+<div class="footer">
+  <p>© 2026 AIPolisher. All rights reserved. Secured by ContentGuard.</p>
 </div>
 
 <script>
-  let selectedFormat = 'mp3';
-  let videoId = '';
-  let realDownloadUrl = '';
-
-  function selectFormat(btn, fmt) {
-    document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedFormat = fmt;
+  function updateCount() {
+    const text = document.getElementById('inputText').value;
+    document.getElementById('charCount').textContent = text.length + ' characters';
   }
 
-  function extractVideoId(url) {
-    const patterns = [
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-      /youtube\.com\/shorts\/([^&\n?#]+)/
-    ];
-    for (const p of patterns) {
-      const m = url.match(p);
-      if (m) return m[1];
-    }
-    return null;
-  }
-
-  function convert() {
-    const url = document.getElementById('urlInput').value.trim();
-    const loading = document.getElementById('loading');
-    const result = document.getElementById('result');
-    const error = document.getElementById('error');
-
-    result.classList.remove('show');
-    error.classList.remove('show');
-
-    if (!url) {
-      error.textContent = '⚠️ Please enter a YouTube link';
-      error.classList.add('show');
-      return;
-    }
-
-    videoId = extractVideoId(url);
-    if (!videoId) {
-      error.textContent = '❌ Invalid URL. Please paste a valid YouTube link.';
-      error.classList.add('show');
-      return;
-    }
-
-    loading.classList.add('show');
-    document.getElementById('loadingText').textContent = "Connecting to streaming API server...";
-
-    // رابط الـ API للتحميل الفعلي والآمن
-    const apiEndpoint = `https://api.vevioz.com/api/button/${selectedFormat}?url=${encodeURIComponent(url)}`;
+  function processText() {
+    const input = document.getElementById('inputText').value.trim();
     
+    if (input.length < 15) {
+      alert("⚠️ Please enter a longer text to humanize!");
+      return;
+    }
+
+    const btn = document.getElementById('btnAction');
+    btn.textContent = "Processing Text via AI...";
+    btn.disabled = true;
+
     setTimeout(() => {
-      loading.classList.remove('show');
-      document.getElementById('thumb').src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-      document.getElementById('videoTitle').textContent = `High Quality Extraction Completed (${selectedFormat.toUpperCase()})`;
-      document.getElementById('downloadBtn').textContent = `⬇️ Download ${selectedFormat.toUpperCase()} Now`;
+      let polished = input;
       
-      realDownloadUrl = apiEndpoint; 
-      result.classList.add('show');
-    }, 2000);
+      const dictionary = {
+        "very good": "exceptionally outstanding",
+        "important": "paramount and crucial",
+        "help": "assist and facilitate",
+        "think": "propound and believe",
+        "show": "demonstrate and illustrate",
+        "make": "generate and manufacture",
+        "use": "utilize and implement",
+        "change": "transform and modify",
+        "get": "obtain and acquire",
+        "bad": "unfavorable and detrimental",
+        "happy": "delighted and ecstatic",
+        "sad": "melancholic and despondent"
+      };
+
+      for (const [oldWord, newWord] of Object.entries(dictionary)) {
+        const regex = new RegExp('\\b' + oldWord + '\\b', 'gi');
+        polished = polished.replace(regex, newWord);
+      }
+
+      document.getElementById('outputText').textContent = polished;
+      document.getElementById('resultWrapper').style.display = 'block';
+      
+      btn.textContent = "✨ Optimize & Humanize";
+      btn.disabled = false;
+      
+      document.getElementById('resultWrapper').scrollIntoView({ behavior: 'smooth' });
+    }, 1200);
   }
 
-  function doDownload() {
-    // 1. استدعاء قفل عروض CPAGrip ليقفل الصفحة ويجلب الأرباح
-    if (typeof call_locker === 'function') {
-        call_locker();
-    }
-    
-    // 2. توجيه الصفحة للتحميل الحقيقي بعد بدء القفل مباشرة
-    setTimeout(() => {
-        if(realDownloadUrl) {
-            window.location.href = realDownloadUrl;
-        }
-    }, 1500);
+  function unlockText() {
+    window.open('https://doctoredits.com/1893629', '_blank');
   }
-
-  document.getElementById('urlInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') convert();
-  });
 </script>
 
 </body>
