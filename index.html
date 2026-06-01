@@ -15,6 +15,7 @@
             --primary: #38bdf8;
             --primary-hover: #0284c7;
             --border: #334155;
+            --success: #10b981;
         }
 
         body {
@@ -56,6 +57,11 @@
             text-transform: uppercase;
             display: inline-block;
             margin-bottom: 12px;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
         }
 
         h1 {
@@ -116,14 +122,38 @@
             border-radius: 8px;
             cursor: pointer;
             transition: opacity 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
         }
 
         .btn-generate:hover {
             opacity: 0.95;
+        }
+
+        .result-box {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            position: relative;
+        }
+
+        .btn-copy {
+            background: #334155;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-copy:hover {
+            background: #475569;
         }
 
         .footer-note {
@@ -132,11 +162,16 @@
             color: var(--text-muted);
             margin-top: 24px;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<!-- شاشة الإدخال وقفل الـ CPA -->
+<div id="setupForm" class="app-container">
     <div class="header">
         <span class="badge">HeyGen Optimization Engine</span>
         <h1>AI Video Script Architect</h1>
@@ -157,7 +192,7 @@
         </select>
     </div>
 
-    <button class="btn-generate" onclick="processArchitecture()">
+    <button class="btn-generate" onclick="redirectToLocker()">
         Generate Premium Prompts & Hooks
     </button>
 
@@ -166,23 +201,79 @@
     </div>
 </div>
 
+<!-- شاشة النتيجة الحقيقية بعد إكمال العرض العادل -->
+<div id="resultScreen" class="app-container hidden">
+    <div class="header">
+        <span class="badge badge-success">✓ Verification Successful</span>
+        <h1>Your Premium Assets Ready</h1>
+        <p class="subtitle">Copy your custom-generated prompt and viral hooks below for HeyGen.</p>
+    </div>
+
+    <label>1. Optimized HeyGen Prompt:</label>
+    <div class="result-box" id="promptBox"></div>
+    <button class="btn-copy" onclick="copyText('promptBox')">Copy Prompt</button>
+
+    <label style="display:block; margin-top:20px;">2. Viral Retention Hooks:</label>
+    <div class="result-box" id="hooksBox"></div>
+    <button class="btn-copy" onclick="copyText('hooksBox')">Copy Hooks</button>
+
+    <button class="btn-generate" style="margin-top: 30px; background: #334155;" onclick="resetTool()">Generate New Script</button>
+</div>
+
 <script>
-function processArchitecture() {
+// رابط قفل CPA المباشر الخاص بك
+const cpaLockerUrl = "https://doctoredits.com/1893125";
+
+// فحص الحالة عند تحميل الصفحة لمعرفة هل المستخدم عائد من العرض أم لا
+window.onload = function() {
+    if (localStorage.getItem('unlocked') === 'true') {
+        showResults();
+    }
+}
+
+function redirectToLocker() {
     var topic = document.getElementById('videoTopic').value;
     if(topic.trim() === "") {
         alert("Please provide a valid video topic or theme first.");
         return;
     }
     
-    // حفظ المدخلات بشكل احترافي في ذاكرة المتصفح
+    // حفظ المدخلات وتفعيل علامة الفتح للمرة القادمة
     localStorage.setItem('savedTopic', topic);
     localStorage.setItem('savedTone', document.getElementById('audienceTone').value);
+    localStorage.setItem('unlocked', 'true'); 
     
-    // إشعار احترافي يظهر للأجنبي قبل الانتقال لقفل CPA
     alert("Analyzing niche retention algorithms... Click OK to unlock your tailored script assets.");
     
-    // سأقوم باستبدال السطر التالي برابط إعلانك فور أن ترسل الرابط لي
-    // window.location.href = "YOUR_CPA_LOCKER_URL_HERE";
+    // التحويل إلى رابط الإعلان الخاص بك
+    window.location.href = cpaLockerUrl;
+}
+
+function showResults() {
+    document.getElementById('setupForm').classList.add('hidden');
+    document.getElementById('resultScreen').classList.remove('hidden');
+    
+    var topic = localStorage.getItem('savedTopic') || "Your selected topic";
+    var tone = localStorage.getItem('savedTone') || "Viral Curiosity Loop";
+    
+    // توليد محتوى حقيقي ونظيف ومخصص بناءً على ما كتبه المستخدم
+    document.getElementById('promptBox').innerText = `Act as an expert scriptwriter for HeyGen AI. Create a 60-second video script about "${topic}". Use a "${tone}" tone. Maximize retention in the first 5 seconds. Keep the language natural, punchy, and highly engaging.`;
+    
+    document.getElementById('hooksBox').innerText = `Hook 1: "I bet you didn't know this about ${topic}..."\n\nHook 2: "Stop scrolling if you care about ${topic}. Here is why..."\n\nHook 3: "This is the scariest truth about ${topic} nobody talks about."`;
+}
+
+function copyText(elementId) {
+    var text = document.getElementById(elementId).innerText;
+    navigator.clipboard.writeText(text).then(function() {
+        alert("Copied to clipboard!");
+    });
+}
+
+function resetTool() {
+    localStorage.removeItem('unlocked');
+    localStorage.removeItem('savedTopic');
+    localStorage.removeItem('savedTone');
+    window.location.reload();
 }
 </script>
 
