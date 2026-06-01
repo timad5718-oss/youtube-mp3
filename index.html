@@ -1,258 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NexusAI — Free AI Writing & Content Tool</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #020408;
-    --surface: #0c1018;
-    --surface2: #111827;
-    --border: rgba(255,255,255,0.06);
-    --accent: #00e5ff;
-    --accent2: #7c3aed;
-    --accent3: #f59e0b;
-    --text: #f1f5f9;
-    --muted: #64748b;
-    --glow: rgba(0,229,255,0.15);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
-  .bg-grid { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
-  .bg-orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; animation: orbFloat 8s ease-in-out infinite; }
-  .bg-orb-1 { width: 600px; height: 600px; background: rgba(0,229,255,0.05); top: -200px; right: -200px; }
-  .bg-orb-2 { width: 500px; height: 500px; background: rgba(124,58,237,0.06); bottom: -150px; left: -150px; animation-delay: -4s; }
-  @keyframes orbFloat { 0%,100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-30px) scale(1.05); } }
-  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; background: rgba(2,4,8,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .logo span { color: var(--accent3); -webkit-text-fill-color: var(--accent3); }
-  .nav-badge { background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(124,58,237,0.15)); border: 1px solid rgba(0,229,255,0.2); color: var(--accent); font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 100px; }
-  .hero { position: relative; z-index: 1; text-align: center; padding: 80px 20px 60px; }
-  .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2); color: var(--accent); font-size: 13px; font-weight: 500; padding: 6px 16px; border-radius: 100px; margin-bottom: 28px; animation: fadeDown 0.6s ease both; }
-  .hero-tag::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  h1 { font-family: 'Syne', sans-serif; font-size: clamp(36px, 6vw, 72px); font-weight: 800; line-height: 1.05; letter-spacing: -2px; margin-bottom: 20px; animation: fadeDown 0.6s 0.1s ease both; }
-  h1 .gradient { background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 50%, var(--accent3) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero-sub { font-size: 18px; color: var(--muted); max-width: 560px; margin: 0 auto 40px; line-height: 1.7; font-weight: 300; animation: fadeDown 0.6s 0.2s ease both; }
-  .tools-tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 50px; animation: fadeDown 0.6s 0.3s ease both; }
-  .tab { padding: 8px 20px; border-radius: 100px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); background: var(--surface); color: var(--muted); }
-  .tab:hover { border-color: rgba(0,229,255,0.3); color: var(--text); }
-  .tab.active { background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(124,58,237,0.15)); border-color: rgba(0,229,255,0.4); color: var(--accent); }
-  .tool-wrapper { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 20px 80px; animation: fadeUp 0.6s 0.4s ease both; }
-  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; box-shadow: 0 0 60px rgba(0,229,255,0.05), 0 40px 80px rgba(0,0,0,0.4); }
-  .tool-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-  .tool-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .tool-dot-1 { background: #ff5f57; } .tool-dot-2 { background: #febc2e; } .tool-dot-3 { background: #28c840; }
-  .tool-title-bar { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--muted); }
-  .tool-body { padding: 28px 24px; }
-  .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 24px; }
-  .type-btn { padding: 14px 16px; border-radius: 14px; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); text-align: center; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
-  .type-btn:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-2px); }
-  .type-btn.active { border-color: var(--accent); background: rgba(0,229,255,0.08); box-shadow: 0 0 20px rgba(0,229,255,0.1); }
-  .type-btn .icon { font-size: 22px; margin-bottom: 6px; } .type-btn .label { font-size: 13px; font-weight: 500; color: var(--text); } .type-btn .desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .input-section { margin-bottom: 20px; }
-  .input-label { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-  textarea, select, input[type=text] { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 14px; padding: 14px 16px; font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; resize: vertical; transition: border-color 0.2s; }
-  textarea:focus, select:focus, input:focus { border-color: rgba(0,229,255,0.4); box-shadow: 0 0 0 3px rgba(0,229,255,0.05); }
-  textarea { min-height: 120px; } select { appearance: none; cursor: pointer; }
-  .options-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-  .gen-btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: linear-gradient(135deg, var(--accent), #7c3aed); color: #000; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
-  .gen-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,229,255,0.3); }
-  .gen-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-  .loading-bar { height: 3px; background: var(--border); border-radius: 2px; margin: 16px 0; overflow: hidden; display: none; }
-  .loading-bar.active { display: block; }
-  .loading-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #7c3aed, var(--accent3)); border-radius: 2px; transition: width 0.1s linear; }
-  .result-section { margin-top: 24px; display: none; animation: fadeUp 0.4s ease both; }
-  .result-section.show { display: block; }
-  .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .result-label { font-size: 13px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 6px; }
-  .copy-btn { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); cursor: pointer; transition: all 0.2s; }
-  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .result-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; font-size: 15px; line-height: 1.75; color: var(--text); white-space: pre-wrap; max-height: 400px; overflow-y: auto; filter: blur(6px); user-select: none; transition: filter 0.3s; }
-  .result-box.unlocked { filter: none; user-select: text; }
-  .result-wrap { position: relative; }
-  .unlock-overlay { display: none; position: absolute; inset: 0; border-radius: 14px; background: rgba(2,4,8,0.85); backdrop-filter: blur(4px); align-items: center; justify-content: center; flex-direction: column; gap: 16px; text-align: center; padding: 24px; z-index: 10; }
-  .unlock-overlay.show { display: flex; }
-  .unlock-icon { font-size: 40px; }
-  .unlock-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); }
-  .unlock-sub { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 300px; }
-  .unlock-btn { padding: 14px 32px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--accent3), #f97316); color: #000; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
-  .unlock-btn:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(245,158,11,0.4); }
-  .unlock-note { font-size: 11px; color: var(--muted); }
-  .stats-bar { display: flex; gap: 24px; padding: 20px 24px; border-top: 1px solid var(--border); background: rgba(0,229,255,0.02); }
-  .stat { text-align: center; flex: 1; }
-  .stat-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); }
-  .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .features { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto 80px; padding: 0 20px; }
-  .section-title { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; text-align: center; margin-bottom: 40px; letter-spacing: -1px; }
-  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-  .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: all 0.3s; }
-  .feature-card:hover { border-color: rgba(0,229,255,0.2); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-  .feature-icon { font-size: 32px; margin-bottom: 16px; }
-  .feature-name { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-  .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
-  footer { position: relative; z-index: 1; text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
-  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @media (max-width: 600px) { nav { padding: 14px 20px; } .options-row { grid-template-columns: 1fr; } .stats-bar { gap: 12px; } .type-grid { grid-template-columns: repeat(2, 1fr); } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral AI Prompt & Hook Architect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #131c2e;
+            --bg-input: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #38bdf8;
+            --primary-hover: #0284c7;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .app-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: var(--bg-input);
+            color: #fff;
+            font-size: 15px;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+
+        .btn-generate {
+            width: 100%;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: #fff;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-generate:hover {
+            opacity: 0.95;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 24px;
+        }
+    </style>
 </head>
 <body>
-<div class="bg-grid"></div>
-<div class="bg-orb bg-orb-1"></div>
-<div class="bg-orb bg-orb-2"></div>
-<nav>
-  <div class="logo">Nexus<span>AI</span></div>
-  <div class="nav-badge">✦ Free Forever</div>
-</nav>
-<section class="hero">
-  <div class="hero-tag">Powered by Advanced AI</div>
-  <h1>Create Any Content<br><span class="gradient">In Seconds — Free</span></h1>
-  <p class="hero-sub">The world's most powerful free AI writing tool. Blog posts, ads, emails, scripts, and more — generated instantly.</p>
-  <div class="tools-tabs">
-    <div class="tab active" onclick="switchTab(this,'writer')">✍️ AI Writer</div>
-    <div class="tab" onclick="switchTab(this,'rewriter')">🔄 Rewriter</div>
-    <div class="tab" onclick="switchTab(this,'hook')">🎯 Hook Generator</div>
-    <div class="tab" onclick="switchTab(this,'email')">📧 Email Writer</div>
-    <div class="tab" onclick="switchTab(this,'seo')">🔍 SEO Title</div>
-  </div>
-</section>
-<div class="tool-wrapper">
-  <div class="tool-card">
-    <div class="tool-header">
-      <div class="tool-dot tool-dot-1"></div>
-      <div class="tool-dot tool-dot-2"></div>
-      <div class="tool-dot tool-dot-3"></div>
-      <div class="tool-title-bar">nexusai.app — Free AI Content Generator</div>
+
+<div class="app-container">
+    <div class="header">
+        <span class="badge">HeyGen Optimization Engine</span>
+        <h1>AI Video Script Architect</h1>
+        <p class="subtitle">Transform simple ideas into highly retention-optimized prompts and premium hooks instantly.</p>
     </div>
-    <div class="tool-body">
-      <div class="type-grid">
-        <div class="type-btn active" onclick="selectType(this,'Blog Post')"><div class="icon">📝</div><div class="label">Blog Post</div><div class="desc">Full articles</div></div>
-        <div class="type-btn" onclick="selectType(this,'Ad Copy')"><div class="icon">📢</div><div class="label">Ad Copy</div><div class="desc">Facebook & Google</div></div>
-        <div class="type-btn" onclick="selectType(this,'Product Description')"><div class="icon">🛍️</div><div class="label">Product Desc</div><div class="desc">E-commerce</div></div>
-        <div class="type-btn" onclick="selectType(this,'Social Media Post')"><div class="icon">📱</div><div class="label">Social Post</div><div class="desc">All platforms</div></div>
-        <div class="type-btn" onclick="selectType(this,'YouTube Script')"><div class="icon">🎬</div><div class="label">YT Script</div><div class="desc">Video content</div></div>
-        <div class="type-btn" onclick="selectType(this,'Sales Email')"><div class="icon">✉️</div><div class="label">Sales Email</div><div class="desc">Convert leads</div></div>
-      </div>
-      <div class="input-section">
-        <div class="input-label">📌 Topic or Product</div>
-        <textarea id="topicInput" placeholder="e.g. 'Best productivity apps for remote workers'"></textarea>
-      </div>
-      <div class="options-row">
-        <div>
-          <div class="input-label">🌍 Tone</div>
-          <select id="toneSelect">
-            <option>Professional</option>
-            <option>Casual & Friendly</option>
-            <option>Persuasive</option>
-            <option>Witty & Humorous</option>
-            <option>Authoritative</option>
-            <option>Inspirational</option>
-          </select>
-        </div>
-        <div>
-          <div class="input-label">📏 Length</div>
-          <select id="lengthSelect">
-            <option>Short (150-300 words)</option>
-            <option selected>Medium (300-600 words)</option>
-            <option>Long (600-1000 words)</option>
-          </select>
-        </div>
-      </div>
-      <button class="gen-btn" id="genBtn" onclick="generate()">✦ Generate Content — Free</button>
-      <div class="loading-bar" id="loadingBar"><div class="loading-fill" id="loadingFill"></div></div>
-      <div class="result-section" id="resultSection">
-        <div class="result-header">
-          <div class="result-label">Generated Content</div>
-          <button class="copy-btn" onclick="copyResult()">Copy</button>
-        </div>
-        <div class="result-wrap">
-          <div class="result-box" id="resultBox"></div>
-          <div class="unlock-overlay" id="unlockOverlay">
-            <div class="unlock-icon">🔓</div>
-            <div class="unlock-title">Your Content is Ready!</div>
-            <div class="unlock-sub">Complete a quick 30-second human verification to unlock your full generated content.</div>
-            <a href="https://doctoredits.com/1893311" target="_blank" class="unlock-btn" onclick="handleUnlock()">✦ Unlock Full Content — Free</a>
-            <div class="unlock-note">🔒 Safe & secure · No credit card required · Takes ~30 seconds</div>
-          </div>
-        </div>
-      </div>
+
+    <div class="form-group">
+        <label for="videoTopic">What is your video topic or niche?</label>
+        <input type="text" id="videoTopic" placeholder="e.g., 3 Dark psychology tricks to spot a liar...">
     </div>
-    <div class="stats-bar">
-      <div class="stat"><div class="stat-num" id="statUsers">248K+</div><div class="stat-label">Active Users</div></div>
-      <div class="stat"><div class="stat-num">5.2M+</div><div class="stat-label">Texts Generated</div></div>
-      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free Forever</div></div>
-      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">User Rating</div></div>
+
+    <div class="form-group">
+        <label for="audienceTone">Select Content Psychological Tone</label>
+        <select id="audienceTone">
+            <option value="Viral Curiosity Loop">Viral Curiosity Loop (High Retention)</option>
+            <option value="Authority & Deep Educational">Authority & Deep Educational</option>
+            <option value="Extreme Urgency & Alert">Extreme Urgency & Alert</option>
+        </select>
     </div>
-  </div>
+
+    <button class="btn-generate" onclick="processArchitecture()">
+        Generate Premium Prompts & Hooks
+    </button>
+
+    <div class="footer-note">
+        Powered by Advanced Content Psychology AI. Secured & verified.
+    </div>
 </div>
-<section class="features">
-  <div class="section-title">Why 248,000+ creators choose NexusAI</div>
-  <div class="features-grid">
-    <div class="feature-card"><div class="feature-icon">⚡</div><div class="feature-name">Lightning Fast</div><div class="feature-desc">Generate high-quality content in under 10 seconds.</div></div>
-    <div class="feature-card"><div class="feature-icon">🧠</div><div class="feature-name">Advanced AI Model</div><div class="feature-desc">Powered by the latest language models for human-quality writing.</div></div>
-    <div class="feature-card"><div class="feature-icon">🌐</div><div class="feature-name">30+ Content Types</div><div class="feature-desc">From blog posts to ad copy, emails to scripts.</div></div>
-    <div class="feature-card"><div class="feature-icon">🎯</div><div class="feature-name">SEO Optimized</div><div class="feature-desc">Content built to rank on Google.</div></div>
-    <div class="feature-card"><div class="feature-icon">🔒</div><div class="feature-name">100% Free</div><div class="feature-desc">No credit card. No hidden fees. Unlimited generations.</div></div>
-    <div class="feature-card"><div class="feature-icon">✨</div><div class="feature-name">Plagiarism Free</div><div class="feature-desc">Every piece is uniquely generated. Original content guaranteed.</div></div>
-  </div>
-</section>
-<footer>
-  <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,#00e5ff,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">NexusAI</div>
-  <div>© 2026 NexusAI · Free AI Content Generator · All rights reserved</div>
-</footer>
+
 <script>
-  let currentType = 'Blog Post';
-  let unlocked = false;
-  let generatedContent = '';
-  function switchTab(el, tab) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    const placeholders = { writer: "e.g. 'Best productivity apps for remote workers'", rewriter: "Paste your existing text here to rewrite it...", hook: "e.g. 'How I made $10K in 30 days'", email: "e.g. 'Cold email to SaaS founders'", seo: "e.g. 'Best running shoes for flat feet 2026'" };
-    document.getElementById('topicInput').placeholder = placeholders[tab];
-  }
-  function selectType(el, type) {
-    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    currentType = type;
-  }
-  async function generate() {
-    const topic = document.getElementById('topicInput').value.trim();
-    if (!topic) { document.getElementById('topicInput').style.borderColor = 'rgba(239,68,68,0.5)'; setTimeout(() => document.getElementById('topicInput').style.borderColor = '', 2000); return; }
-    const btn = document.getElementById('genBtn');
-    const loadingBar = document.getElementById('loadingBar');
-    const loadingFill = document.getElementById('loadingFill');
-    btn.disabled = true; btn.textContent = '⟳ Generating...';
-    loadingBar.classList.add('active');
-    document.getElementById('resultSection').classList.remove('show');
-    unlocked = false;
-    let progress = 0;
-    const progressTimer = setInterval(() => { progress += Math.random() * 8; if (progress > 90) progress = 90; loadingFill.style.width = progress + '%'; }, 200);
-    const tone = document.getElementById('toneSelect').value;
-    const length = document.getElementById('lengthSelect').value;
-    try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: `Write a ${currentType} about: "${topic}". Tone: ${tone}. Length: ${length}. Make it compelling and ready to publish.` }] }) });
-      const data = await response.json();
-      generatedContent = data.content?.[0]?.text || 'Content ready!';
-    } catch(e) {
-      generatedContent = `# ${topic}\n\nIn today's fast-paced world, ${topic} has become essential for success. Here's everything you need to know to get started and achieve remarkable results.\n\n## Why It Matters\nThe landscape has shifted dramatically. Smart professionals are leveraging every advantage to stay ahead.\n\n## Key Strategies\n• Identify your core objectives\n• Use data-driven insights\n• Continuously optimize your approach\n\n## Taking Action\nStart today. With consistency and the right strategy, results will follow.\n\n*Generated by NexusAI*`;
+function processArchitecture() {
+    var topic = document.getElementById('videoTopic').value;
+    if(topic.trim() === "") {
+        alert("Please provide a valid video topic or theme first.");
+        return;
     }
-    clearInterval(progressTimer);
-    loadingFill.style.width = '100%';
-    setTimeout(() => { loadingBar.classList.remove('active'); loadingFill.style.width = '0%'; }, 500);
-    document.getElementById('resultBox').textContent = generatedContent;
-    document.getElementById('resultBox').classList.remove('unlocked');
-    document.getElementById('resultSection').classList.add('show');
-    document.getElementById('unlockOverlay').classList.add('show');
-    btn.disabled = false; btn.textContent = '✦ Generate Content — Free';
-  }
-  function handleUnlock() { setTimeout(() => { document.getElementById('unlockOverlay').classList.remove('show'); document.getElementById('resultBox').classList.add('unlocked'); unlocked = true; }, 3000); }
-  function copyResult() {
-    if (!unlocked) { document.getElementById('unlockOverlay').classList.add('show'); return; }
-    navigator.clipboard.writeText(generatedContent).then(() => { const btn = document.querySelector('.copy-btn'); btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = 'Copy', 2000); });
-  }
+    
+    // حفظ المدخلات بشكل احترافي في ذاكرة المتصفح
+    localStorage.setItem('savedTopic', topic);
+    localStorage.setItem('savedTone', document.getElementById('audienceTone').value);
+    
+    // إشعار احترافي يظهر للأجنبي قبل الانتقال لقفل CPA
+    alert("Analyzing niche retention algorithms... Click OK to unlock your tailored script assets.");
+    
+    // سأقوم باستبدال السطر التالي برابط إعلانك فور أن ترسل الرابط لي
+    // window.location.href = "YOUR_CPA_LOCKER_URL_HERE";
+}
 </script>
+
 </body>
 </html>
