@@ -3,81 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viral AI Prompt & Hook Architect</title>
+    <title>AI Video Script Architect - Premium Suite</title>
+    <!-- Google Fonts for High-End Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --bg-card: #131c2e;
-            --bg-input: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --primary: #38bdf8;
-            --primary-hover: #0284c7;
-            --border: #334155;
-            --success: #10b981;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent-blue: #0ea5e9;
+            --accent-gradient: linear-gradient(90deg, #0ea5e9 0%, #2563eb 100%);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
+            background: var(--bg-gradient);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
             padding: 20px;
-            box-sizing: border-box;
+            color: var(--text-primary);
         }
 
-        .app-container {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 40px;
-            max-width: 550px;
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             width: 100%;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
+            max-width: 480px;
+            border-radius: 24px;
+            padding: 40px 32px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         .badge {
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--primary);
-            padding: 6px 12px;
-            border-radius: 100px;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent-blue);
             font-size: 12px;
             font-weight: 600;
-            letter-spacing: 0.5px;
             text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 6px 16px;
+            border-radius: 100px;
             display: inline-block;
-            margin-bottom: 12px;
-        }
-
-        .badge-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
+            margin-bottom: 16px;
+            border: 1px solid rgba(14, 165, 233, 0.2);
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
-            margin: 0 0 8px 0;
-            background: linear-gradient(to right, #fff, #94a3b8);
+            line-height: 1.3;
+            margin-bottom: 12px;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin: 0;
-            line-height: 1.5;
+        .description {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 32px;
         }
 
         .form-group {
@@ -86,196 +86,122 @@
 
         label {
             display: block;
-            margin-bottom: 8px;
             font-size: 14px;
             font-weight: 500;
-            color: #cbd5e1;
+            color: var(--text-primary);
+            margin-bottom: 8px;
         }
 
         input[type="text"], select {
             width: 100%;
             padding: 14px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background-color: var(--bg-input);
-            color: #fff;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
             font-size: 15px;
-            font-family: inherit;
-            box-sizing: border-box;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            outline: none;
         }
 
         input[type="text"]:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
         }
 
-        .btn-generate {
+        select option {
+            background: #0f172a;
+            color: var(--text-primary);
+        }
+
+        .submit-btn {
             width: 100%;
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            color: #fff;
+            background: var(--accent-gradient);
+            color: white;
             border: none;
             padding: 16px;
             font-size: 16px;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: opacity 0.2s;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 8px;
         }
 
-        .btn-generate:hover {
-            opacity: 0.95;
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(14, 165, 233, 0.5);
         }
 
-        .result-box {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 15px;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #e2e8f0;
-            white-space: pre-wrap;
-            position: relative;
-        }
-
-        .btn-copy {
-            background: #334155;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .btn-copy:hover {
-            background: #475569;
+        .submit-btn:active {
+            transform: translateY(0);
         }
 
         .footer-note {
             text-align: center;
-            font-size: 11px;
-            color: var(--text-muted);
             margin-top: 24px;
-        }
-
-        .hidden {
-            display: none;
+            font-size: 12px;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
 
-<!-- شاشة الإدخال وقفل الـ CPA -->
-<div id="setupForm" class="app-container">
-    <div class="header">
-        <span class="badge">HeyGen Optimization Engine</span>
-        <h1>AI Video Script Architect</h1>
-        <p class="subtitle">Transform simple ideas into highly retention-optimized prompts and premium hooks instantly.</p>
+    <div class="container">
+        <center><div class="badge">Next-Gen AI Engine</div></center>
+        <h1 style="text-align: center;">AI Video Script Architect</h1>
+        <p class="description" style="text-align: center;">Transform raw concepts into highly optimized, retention-breaking prompts and premium viral hooks instantly.</p>
+        
+        <form id="architectForm">
+            <!-- Input 1: Topic -->
+            <div class="form-group">
+                <label for="topic">What is your video topic or niche?</label>
+                <input type="text" id="topic" placeholder="e.g., 3 Dark psychology tricks, Faceless Wealth" required>
+            </div>
+
+            <!-- Input 2: Roles (NEW Feature) -->
+            <div class="form-group">
+                <label for="role">Select AI Content Architect Role</label>
+                <select id="role">
+                    <option value="viral-shorts">TikTok & Shorts Growth Specialist</option>
+                    <option value="psychology">Neuro-Marketing & Hook Expert</option>
+                    <option value="storyteller">Cinematic Storyteller & Scriptwriter</option>
+                    <option value="copywriter">High-Conversion Retention Engineer</option>
+                </select>
+            </div>
+
+            <!-- Input 3: Psychological Tone -->
+            <div class="form-group">
+                <label for="tone">Select Content Psychological Tone</label>
+                <select id="tone">
+                    <option value="curiosity">Viral Curiosity Loop (High Retention)</option>
+                    <option value="authority">Aggressive Authority & Urgency</option>
+                    <option value="story">Emotional Cliffhanger Blueprint</option>
+                    <option value="controversial">Controversial Perspective Spark</option>
+                </select>
+            </div>
+
+            <!-- Submit Button with CPA Link Embedded -->
+            <button type="submit" class="submit-btn">Generate Premium Prompts & Hooks</button>
+        </form>
+
+        <p class="footer-note">Powered by Advanced Content Psychology AI. Secured & verified.</p>
     </div>
 
-    <div class="form-group">
-        <label for="videoTopic">What is your video topic or niche?</label>
-        <input type="text" id="videoTopic" placeholder="e.g., 3 Dark psychology tricks to spot a liar...">
-    </div>
-
-    <div class="form-group">
-        <label for="audienceTone">Select Content Psychological Tone</label>
-        <select id="audienceTone">
-            <option value="Viral Curiosity Loop">Viral Curiosity Loop (High Retention)</option>
-            <option value="Authority & Deep Educational">Authority & Deep Educational</option>
-            <option value="Extreme Urgency & Alert">Extreme Urgency & Alert</option>
-        </select>
-    </div>
-
-    <button class="btn-generate" onclick="redirectToLocker()">
-        Generate Premium Prompts & Hooks
-    </button>
-
-    <div class="footer-note">
-        Powered by Advanced Content Psychology AI. Secured & verified.
-    </div>
-</div>
-
-<!-- شاشة النتيجة الحقيقية بعد إكمال العرض العادل -->
-<div id="resultScreen" class="app-container hidden">
-    <div class="header">
-        <span class="badge badge-success">✓ Verification Successful</span>
-        <h1>Your Premium Assets Ready</h1>
-        <p class="subtitle">Copy your custom-generated prompt and viral hooks below for HeyGen.</p>
-    </div>
-
-    <label>1. Optimized HeyGen Prompt:</label>
-    <div class="result-box" id="promptBox"></div>
-    <button class="btn-copy" onclick="copyText('promptBox')">Copy Prompt</button>
-
-    <label style="display:block; margin-top:20px;">2. Viral Retention Hooks:</label>
-    <div class="result-box" id="hooksBox"></div>
-    <button class="btn-copy" onclick="copyText('hooksBox')">Copy Hooks</button>
-
-    <button class="btn-generate" style="margin-top: 30px; background: #334155;" onclick="resetTool()">Generate New Script</button>
-</div>
-
-<script>
-// رابط قفل CPA المباشر الخاص بك
-const cpaLockerUrl = "https://doctoredits.com/1893125";
-
-// فحص الحالة عند تحميل الصفحة لمعرفة هل المستخدم عائد من العرض أم لا
-window.onload = function() {
-    if (localStorage.getItem('unlocked') === 'true') {
-        showResults();
-    }
-}
-
-function redirectToLocker() {
-    var topic = document.getElementById('videoTopic').value;
-    if(topic.trim() === "") {
-        alert("Please provide a valid video topic or theme first.");
-        return;
-    }
-    
-    // حفظ المدخلات وتفعيل علامة الفتح للمرة القادمة
-    localStorage.setItem('savedTopic', topic);
-    localStorage.setItem('savedTone', document.getElementById('audienceTone').value);
-    localStorage.setItem('unlocked', 'true'); 
-    
-    alert("Analyzing niche retention algorithms... Click OK to unlock your tailored script assets.");
-    
-    // التحويل إلى رابط الإعلان الخاص بك
-    window.location.href = cpaLockerUrl;
-}
-
-function showResults() {
-    document.getElementById('setupForm').classList.add('hidden');
-    document.getElementById('resultScreen').classList.remove('hidden');
-    
-    var topic = localStorage.getItem('savedTopic') || "Your selected topic";
-    var tone = localStorage.getItem('savedTone') || "Viral Curiosity Loop";
-    
-    // توليد محتوى حقيقي ونظيف ومخصص بناءً على ما كتبه المستخدم
-    document.getElementById('promptBox').innerText = `Act as an expert scriptwriter for HeyGen AI. Create a 60-second video script about "${topic}". Use a "${tone}" tone. Maximize retention in the first 5 seconds. Keep the language natural, punchy, and highly engaging.`;
-    
-    document.getElementById('hooksBox').innerText = `Hook 1: "I bet you didn't know this about ${topic}..."\n\nHook 2: "Stop scrolling if you care about ${topic}. Here is why..."\n\nHook 3: "This is the scariest truth about ${topic} nobody talks about."`;
-}
-
-function copyText(elementId) {
-    var text = document.getElementById(elementId).innerText;
-    navigator.clipboard.writeText(text).then(function() {
-        alert("Copied to clipboard!");
-    });
-}
-
-function resetTool() {
-    localStorage.removeItem('unlocked');
-    localStorage.removeItem('savedTopic');
-    localStorage.removeItem('savedTone');
-    window.location.reload();
-}
-</script>
+    <script>
+        document.getElementById('architectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Your Live CPAGrip Locker URL (Optimized for US Email/Zip Submits)
+            const cpaLockerUrl = "https://doctoredits.com/1893125";
+            
+            // Redirects the international user straight to the CPA Content Locker
+            window.location.href = cpaLockerUrl;
+        });
+    </script>
 
 </body>
 </html>
